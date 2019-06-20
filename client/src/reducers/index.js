@@ -5,6 +5,7 @@ import profile from './profile'
 import post from './post'
 import entry from './entry'
 import author from './author'
+import source from './source'
 
 export default combineReducers({
   alert,
@@ -13,4 +14,5 @@ export default combineReducers({
   post,
   entry,
   author,
+  source,
 })

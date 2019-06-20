@@ -44,7 +44,7 @@ const SourceForm = ({ addSource }) => {
   return (
     <div className='post-form'>
       <div className='bg-primary p'>
-        <h3>New Author</h3>
+        <h3>New Source</h3>
       </div>
 
       <form
@@ -105,12 +105,34 @@ const SourceForm = ({ addSource }) => {
         <div className='form-group'>
           <input
             type='text'
-            placeholder='City'
-            name='city'
-            value={city}
+            placeholder='Publishing Company'
+            name='publishingCompany'
+            value={publishingCompany}
             onChange={e => onChange(e)}
           />
-          <small className='form-text'>city published in</small>
+          <small className='form-text'>company that published source</small>
+        </div>
+
+        <div className='form-group'>
+          <input
+            type='text'
+            placeholder='Source Type'
+            name='sourceType'
+            value={sourceType}
+            onChange={e => onChange(e)}
+          />
+          <small className='form-text'>what type of source is this?</small>
+        </div>
+
+        <div className='form-group'>
+          <input
+            type='text'
+            placeholder='URL'
+            name='url'
+            value={url}
+            onChange={e => onChange(e)}
+          />
+          <small className='form-text'>source web site</small>
         </div>
 
         <input type='submit' className='btn btn-dark my-1' value='Submit' />

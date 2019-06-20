@@ -38,3 +38,11 @@ export const DELETE_AUTHOR = 'DELETE_AUTHOR'
 export const ADD_AUTHOR = 'ADD_AUTHOR'
 export const GET_AUTHOR = 'GET_AUTHOR'
 export const RECEIVE_AUTHORS = ' RECEIVE_AUTHORS'
+
+// sources
+export const GET_SOURCES = 'GET_SOURCES'
+export const SOURCE_ERROR = 'SOURCE_ERROR'
+export const DELETE_SOURCE = 'DELETE_SOURCE'
+export const ADD_SOURCE = 'ADD_SOURCE'
+export const GET_SOURCE = 'GET_SOURCE'
+export const RECEIVE_SOURCES = ' RECEIVE_SOURCES'

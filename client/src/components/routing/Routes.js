@@ -13,6 +13,7 @@ import Profile from '../profile/Profile'
 import Posts from '../posts/Posts'
 import Entries from '../entries/Entries'
 import Authors from '../authors/Authors'
+import Sources from '../sources/Sources'
 
 import Post from '../post/Post'
 import NotFound from '../layout/NotFound'
@@ -35,6 +36,7 @@ const Routes = () => {
         <PrivateRoute exact path='/posts' component={Posts} />
         <PrivateRoute exact path='/entries' component={Entries} />
         <PrivateRoute exact path='/authors' component={Authors} />
+        <PrivateRoute exact path='/sources' component={Sources} />
 
         <PrivateRoute exact path='/posts/:id' component={Post} />
         <Route component={NotFound} />

@@ -2,8 +2,8 @@ import React, { Fragment, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Spinner from '../layout/Spinner'
-//import AuthorItem from './AuthorItem'
-import SourcesForm from './SourcesForms'
+import SourceItem from './SourceItem'
+import SourcesForm from './SourceForms'
 import { getSources } from '../../actions/source'
 
 const Sources = ({ getSources, source: { sources, loading } }) => {
@@ -15,18 +15,17 @@ const Sources = ({ getSources, source: { sources, loading } }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <h1 className='large text-primary'>Authors</h1>
+      <h1 className='large text-primary'>Sources</h1>
       <p className='lead'>
-        <i className='fas fa-user' /> add new author
+        <i className='fas fa-user' /> add new source
       </p>
       <SourcesForm />
-      {/*
+
       <div className='posts'>
-        {authors.map(author => (
-          <AuthorItem key={author._id} author={author} />
+        {sources.map(source => (
+          <SourceItem key={source._id} source={source} />
         ))}
       </div>
-        */}
     </Fragment>
   )
 }
