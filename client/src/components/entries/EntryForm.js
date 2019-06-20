@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addEntry } from '../../actions/entry'
+import { getAuthors } from '../../actions/author'
+import { getSources } from '../../actions/source'
 
 const clearForm = {
   author: '',
@@ -14,7 +16,18 @@ const clearForm = {
   document: '',
 }
 
-const EntryForm = ({ addEntry }) => {
+const EntryForm = ({
+  addEntry,
+  getAuthors,
+  author: { authors, loading },
+  getSources,
+  source: { sources },
+}) => {
+  useEffect(() => {
+    getAuthors()
+    getSources()
+  }, [getAuthors, getSources])
+
   const [formData, setFormData] = useState(clearForm)
 
   const {
@@ -28,8 +41,26 @@ const EntryForm = ({ addEntry }) => {
     document,
   } = formData
 
-  const onChange = e =>
+  const authorsList = authors.map(a => (
+    <option key={a._id} value={a._id} label={a.lastName} />
+  ))
+
+  let newSources = sources
+  if (author.length > 0) {
+    newSources = sources.filter(s => {
+      const result = s.authors.includes(author)
+      return result
+    })
+  }
+  console.log(newSources)
+
+  const sourcesList = newSources.map(s => (
+    <option key={s._id} value={s._id} label={s.resource} />
+  ))
+
+  const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   const onSubmit = e => {
     formData.document = formData.entry
@@ -49,9 +80,25 @@ const EntryForm = ({ addEntry }) => {
         onSubmit={e => {
           e.preventDefault()
           onSubmit(e)
-          //  setText('')
         }}
       >
+        <div className='form-group'>
+          <select name='author' value={author} onChange={e => onChange(e)}>
+            <option value='0'>* Select Author</option>
+            {authorsList}
+          </select>
+          <small className='form-text'>author</small>
+        </div>
+
+        <div className='form-group'>
+          <select name='source' value={source} onChange={e => onChange(e)}>
+            <option value='0'>* Select Source</option>
+            {sourcesList}
+          </select>
+          <small className='form-text'>source</small>
+        </div>
+
+        {/*
         <div className='form-group'>
           <input
             type='text'
@@ -73,7 +120,7 @@ const EntryForm = ({ addEntry }) => {
           />
           <small className='form-text'>source of new entry</small>
         </div>
-
+      */}
         <div className='form-group'>
           <input
             type='text'
@@ -116,9 +163,16 @@ const EntryForm = ({ addEntry }) => {
 
 EntryForm.propTypes = {
   addEntry: PropTypes.func.isRequired,
+  getAuthors: PropTypes.func.isRequired,
+  getSources: PropTypes.func.isRequired,
 }
 
+const mapStateToProps = state => ({
+  author: state.author,
+  source: state.source,
+})
+
 export default connect(
-  null,
-  { addEntry }
+  mapStateToProps,
+  { addEntry, getAuthors, getSources }
 )(EntryForm)

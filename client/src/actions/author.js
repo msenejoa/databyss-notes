@@ -18,7 +18,6 @@ export const getAuthors = () => async dispatch => {
 
     const res = await axios.get('/api/authors')
     let authors = res.data
-    console.log(res.data)
     /*
     getAuthor(entries).then(data => {
       getSources(data).then(d => {

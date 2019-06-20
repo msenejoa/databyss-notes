@@ -67,7 +67,7 @@ export const addEntry = formData => async dispatch => {
       type: ADD_ENTRY,
       payload: res.data,
     })
-
+    dispatch(getEntries())
     dispatch(setAlert('Entry Created', 'success'))
   } catch (err) {
     console.log(err)
