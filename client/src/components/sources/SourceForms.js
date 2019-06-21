@@ -23,7 +23,7 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
   }, [getAuthors])
 
   const [formData, setFormData] = useState(clearForm)
-  console.log(author)
+
   const {
     resource,
     abbreviation,
@@ -37,9 +37,35 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
     entries,
   } = formData
 
-  const authorsList = author.authors.map(a => (
-    <option key={a._id} value={a._id} label={a.lastName} />
-  ))
+  const [renderList, setRenderList] = useState({})
+  const [authorList, setAuthorList] = useState([])
+
+  useEffect(() => {
+    setAuthorList(author.authors)
+  }, [author])
+
+  useEffect(() => {
+    setAuthorList(authorList.filter(a => authors.indexOf(a._id) < 0))
+  }, [formData])
+
+  useEffect(() => {
+    setRenderList({
+      dropdown: authorList.map(a => (
+        <option key={a._id} value={a._id} label={a.lastName} />
+      )),
+      selected: authors.map(a => {
+        const match = author.authors.find(b => b._id == a)
+        return (
+          <th>
+            <a class='btn-small btn-light' value={match._id}>
+              <i class='fas fa-window-close text-danger' />
+            </a>
+            {'  ' + match.lastName}
+          </th>
+        )
+      }),
+    })
+  }, [authorList])
 
   const onChange = e => {
     if (e.target.name === 'authors') {
@@ -50,6 +76,7 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
       setFormData({ ...formData, [e.target.name]: e.target.value })
     }
   }
+
   const onSubmit = e => {
     addSource(formData)
     setFormData(clearForm)
@@ -70,11 +97,18 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
         }}
       >
         <div className='form-group'>
-          <select name='authors' value={authors} onChange={e => onChange(e)}>
-            <option value='0'>* Select Author</option>
-            {authorsList}
-          </select>
-          <small className='form-text'>author</small>
+          <div class='m-1'>
+            <select name='authors' value={authors} onChange={e => onChange(e)}>
+              <option value='0'>* Select Author</option>
+              {renderList.dropdown}
+            </select>
+            <small className='form-text'>author</small>
+          </div>
+          <div class='dash-buttons m-1'>
+            <table class='table'>
+              <tr>{renderList.selected}</tr>
+            </table>
+          </div>
         </div>
 
         <div className='form-group'>

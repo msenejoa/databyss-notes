@@ -23,7 +23,6 @@ const SourceItem = ({
 }) => (
   <div className='post bg-white p-1 my-1'>
     <div>
-      {console.log(resource)}
       <p className='my-1'>{resource}</p>
     </div>
   </div>

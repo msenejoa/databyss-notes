@@ -52,7 +52,6 @@ const EntryForm = ({
       return result
     })
   }
-  console.log(newSources)
 
   const sourcesList = newSources.map(s => (
     <option key={s._id} value={s._id} label={s.resource} />
