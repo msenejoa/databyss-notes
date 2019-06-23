@@ -63,6 +63,7 @@ const EntryForm = ({
 
   const onSubmit = e => {
     formData.document = formData.entry
+    console.log(formData)
     e.preventDefault()
     addEntry(formData)
     setFormData(clearForm)

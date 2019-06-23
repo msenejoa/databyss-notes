@@ -103,18 +103,14 @@ export const getAuthor = id => async dispatch => {
 }
 
 //RETURNS A PROMISE TO GET ALL AUTHORS
-/*
-const getAuthor = entry => {
-  const promises = entry.map(async e => {
-    const entryRes = await axios.get(`/api/authors/${e.author}`)
-    return {
-      ...e,
-      author: entryRes.data,
-    }
+
+export const getAuthorList = entries => {
+  const promises = entries.map(async e => {
+    const entryRes = await axios.get(`/api/authors/${e}`)
+    return entryRes.data
   })
   return Promise.all(promises)
 }
-*/
 
 // Returns a promies to get all sources
 

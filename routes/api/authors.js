@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Author = require('../../models/Author')
+// const Entry = require('../../models/Entry')
+
 const auth = require('../../middleware/auth')
 
 // @route    POST api/authors

@@ -11,9 +11,15 @@ import AddEducation from '../profile-forms/AddEducation'
 import Profiles from '../profiles/Profiles'
 import Profile from '../profile/Profile'
 import Posts from '../posts/Posts'
+
 import Entries from '../entries/Entries'
+import Entry from '../entries/Entry'
+
 import Authors from '../authors/Authors'
+import Author from '../authors/Author'
+
 import Sources from '../sources/Sources'
+import Source from '../sources/Source'
 
 import Post from '../post/Post'
 import NotFound from '../layout/NotFound'
@@ -35,8 +41,13 @@ const Routes = () => {
         <PrivateRoute exact path='/add-education' component={AddEducation} />
         <PrivateRoute exact path='/posts' component={Posts} />
         <PrivateRoute exact path='/entries' component={Entries} />
+
+        <PrivateRoute exact path='/entries/:id' component={Entry} />
+
         <PrivateRoute exact path='/authors' component={Authors} />
+        <PrivateRoute exact path='/authors/:id' component={Author} />
         <PrivateRoute exact path='/sources' component={Sources} />
+        <PrivateRoute exact path='/sources/:id' component={Source} />
 
         <PrivateRoute exact path='/posts/:id' component={Post} />
         <Route component={NotFound} />

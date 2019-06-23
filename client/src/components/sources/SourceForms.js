@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { addSource } from '../../actions/source'
 import { getAuthors } from '../../actions/author'
 
@@ -17,10 +16,15 @@ const clearForm = {
   entries: [],
 }
 
-const SourceForm = ({ author, addSource, getAuthors }) => {
+const SourceForm = () => {
   useEffect(() => {
-    getAuthors()
-  }, [getAuthors])
+    return setFormData({ ...clearForm, authors: [] })
+  }, [])
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAuthors())
+  }, [])
+  const authorState = useSelector(state => state.author)
 
   const [formData, setFormData] = useState(clearForm)
 
@@ -41,11 +45,11 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
   const [authorList, setAuthorList] = useState([])
 
   useEffect(() => {
-    setAuthorList(author.authors)
-  }, [author])
+    setAuthorList(authorState.authors)
+  }, [authorState, formData])
 
   useEffect(() => {
-    setAuthorList(authorList.filter(a => authors.indexOf(a._id) < 0))
+    setAuthorList(authorState.authors.filter(a => authors.indexOf(a._id) < 0))
   }, [formData])
 
   useEffect(() => {
@@ -54,18 +58,25 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
         <option key={a._id} value={a._id} label={a.lastName} />
       )),
       selected: authors.map(a => {
-        const match = author.authors.find(b => b._id == a)
+        const match = authorState.authors.find(b => b._id == a)
         return (
-          <th>
-            <a class='btn-small btn-light' value={match._id}>
-              <i class='fas fa-window-close text-danger' />
+          <th key={match._id}>
+            <a
+              className='btn-small btn-light'
+              onClick={() => removeAuthor(match._id)}
+            >
+              <i className='fas fa-window-close text-danger' />
             </a>
             {'  ' + match.lastName}
           </th>
         )
       }),
     })
-  }, [authorList])
+  }, [authorList, formData])
+
+  const removeAuthor = id => {
+    setFormData({ ...formData, authors: authors.filter(a => a !== id) })
+  }
 
   const onChange = e => {
     if (e.target.name === 'authors') {
@@ -78,8 +89,8 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
   }
 
   const onSubmit = e => {
-    addSource(formData)
-    setFormData(clearForm)
+    dispatch(addSource(formData))
+    setFormData({ ...clearForm, authors: [] })
   }
 
   return (
@@ -93,21 +104,29 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
         onSubmit={e => {
           e.preventDefault()
           onSubmit(e)
-          //  setText('')
         }}
       >
         <div className='form-group'>
-          <div class='m-1'>
-            <select name='authors' value={authors} onChange={e => onChange(e)}>
-              <option value='0'>* Select Author</option>
-              {renderList.dropdown}
-            </select>
-            <small className='form-text'>author</small>
+          <div className='m-1'>
+            {renderList.dropdown && (
+              <select name='authors' onChange={e => onChange(e)}>
+                <option value='0'>* Select Author(s)</option>
+                {renderList.dropdown}
+              </select>
+            )}
+            <small className='form-text'>select one or more authors</small>
           </div>
-          <div class='dash-buttons m-1'>
-            <table class='table'>
-              <tr>{renderList.selected}</tr>
-            </table>
+          <div className='dash-buttons m-1'>
+            {authors.length > 0 && (
+              <div>
+                <h2>Selected</h2>
+                <table className='table'>
+                  <tbody>
+                    <tr>{renderList.selected}</tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
 
@@ -197,16 +216,4 @@ const SourceForm = ({ author, addSource, getAuthors }) => {
   )
 }
 
-SourceForm.propTypes = {
-  addSource: PropTypes.func.isRequired,
-  getAuthors: PropTypes.func.isRequired,
-}
-
-const mapStateToProps = state => ({
-  author: state.author,
-})
-
-export default connect(
-  mapStateToProps,
-  { addSource, getAuthors }
-)(SourceForm)
+export default SourceForm

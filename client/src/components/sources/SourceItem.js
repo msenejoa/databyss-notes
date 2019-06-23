@@ -22,8 +22,14 @@ const SourceItem = ({
   },
 }) => (
   <div className='post bg-white p-1 my-1'>
+    <Link to={`/sources/${_id}`}>
+      <div>
+        <p className='my-1'>{resource}</p>
+      </div>
+    </Link>
+
     <div>
-      <p className='my-1'>{resource}</p>
+      <p className='my-1'>{abbreviation}</p>
     </div>
   </div>
 )

@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Entry = require('../../models/Entry')
+const Author = require('../../models/Author')
+const Source = require('../../models/Source')
+
 const auth = require('../../middleware/auth')
 
 // @route    POST api/entry
@@ -28,6 +31,21 @@ router.post('/', auth, async (req, res) => {
     })
 
     const post = await entries.save()
+
+    appendToList({
+      authorId: post.author,
+      sourceId: post.source,
+      entryId: post._id,
+    })
+    /*
+    const author = await Author.findOne({
+      _id: post.author,
+    })
+
+    const source = await Source.findOne({
+      _id: post.source
+    })
+*/
     res.json(post)
   } catch (err) {
     console.error(err.message)
@@ -79,5 +97,30 @@ router.get('/', auth, async (req, res) => {
     res.status(500).send('Server Error')
   }
 })
+
+const appendToList = async ({ authorId, entryId, sourceId }) => {
+  try {
+    let author = await Author.findOne({
+      _id: authorId,
+    })
+
+    if (author) {
+      let newInput = author
+      let list = newInput.entries
+      if (list.indexOf(entryId) > 0) return
+      list.push(entryId)
+      newInput.entries = list
+
+      author = await Author.findOneAndUpdate(
+        { _id: authorId },
+        { $set: newInput },
+        { new: true }
+      )
+      console.log(author)
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 module.exports = router

@@ -11,7 +11,7 @@ const EntryItem = ({
 }) => (
   <div className='post bg-white p-1 my-1'>
     <div>
-      <Link to={`/author/${source.resource}`}>
+      <Link to={`/entries/${_id}`}>
         <h4>{source.resource}</h4>
       </Link>
     </div>
@@ -19,7 +19,6 @@ const EntryItem = ({
       <p className='my-1'>
         {author.lastName}, {author.firstName}
       </p>
-      <p className='my-1'>{source.resource}</p>
       <p className='my-1'>{pageTo}</p>
       <p className='my-1'>{pageFrom}</p>
       <p className='my-1'>{entry}</p>
