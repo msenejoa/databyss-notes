@@ -1,6 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://backend:8wU0kdKlQGs8tDtt@databyss-tofu2.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "secret",
-  "githubClientId": "",
-  "githubSecret": ""
-}
