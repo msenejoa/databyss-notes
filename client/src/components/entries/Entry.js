@@ -1,12 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
-
+import BackButton from './../buttons/BackButton'
 import Spinner from '../layout/Spinner'
 import SourceItem from './../sources/SourceItem'
 import AuthorItem from './../authors/AuthorItem'
-
 import { getEntry } from '../../actions/entry'
 import { getSource } from '../../actions/source'
 
@@ -51,9 +49,7 @@ const Entry = ({ match }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <Link to='/authors' className='btn'>
-        Back To Authors (this needs to be dynamic)
-      </Link>
+      <BackButton />
       <h1 className='lead text-dark'>Entry: </h1>
       <div className='post bg-white p-1 my-1'>
         <p>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+
 import { connect } from 'react-redux'
 import { addEntry } from '../../actions/entry'
 import { getAuthors } from '../../actions/author'
@@ -8,8 +10,8 @@ import { getSources } from '../../actions/source'
 const clearForm = {
   author: '',
   source: '',
-  pageFrom: 0,
-  pageTo: 0,
+  pageFrom: '',
+  pageTo: '',
   files: [],
   entry: '',
   index: 0,
@@ -43,10 +45,26 @@ const EntryForm = ({
       let a = sources.filter(s => s._id === e.target.value)
       let newFormData = formData
       newFormData.author = a[0].authors
+
       setFormData(newFormData)
     }
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
+
+  const [renderedAuthors, setRenderedAuthors] = useState([])
+
+  useEffect(() => {
+    if (formData.author.length > 0) {
+      const list = formData.author.map(async id => {
+        const res = await axios.get(`/api/authors/${id}`)
+        return res.data
+      })
+      Promise.all(list).then(l => {
+        const render = l.map(a => <h3 key={a._id}>{a.lastName}</h3>)
+        setRenderedAuthors(render)
+      })
+    }
+  }, [formData.author])
 
   const onSubmit = e => {
     formData.document = formData.entry
@@ -68,15 +86,6 @@ const EntryForm = ({
           onSubmit(e)
         }}
       >
-        {/*
-        <div className='form-group'>
-          <select name='author' value={author} onChange={e => onChange(e)}>
-            <option value='0'>* Select Author</option>
-            {authorsList}
-          </select>
-          <small className='form-text'>author</small>
-        </div>
-      */}
         <div className='form-group'>
           <select name='source' value={source} onChange={e => onChange(e)}>
             <option value='0'>* Select Source</option>
@@ -84,30 +93,13 @@ const EntryForm = ({
           </select>
           <small className='form-text'>source</small>
         </div>
+        {renderedAuthors.length > 0 && (
+          <div className='form-group'>
+            {renderedAuthors}
+            <small className='form-text'>authors</small>
+          </div>
+        )}
 
-        {/*
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Author'
-            name='author'
-            value={author}
-            onChange={e => onChange(e)}
-          />
-          <small className='form-text'>author of new entry</small>
-        </div>
-
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Source'
-            name='source'
-            value={source}
-            onChange={e => onChange(e)}
-          />
-          <small className='form-text'>source of new entry</small>
-        </div>
-      */}
         <div className='form-group'>
           <input
             type='text'

@@ -1,22 +1,20 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
-
 import { useSelector, useDispatch } from 'react-redux'
+import BackButton from './../buttons/BackButton'
 import EntryItem from './../entries/EntryItem'
 import SourceItem from './../sources/SourceItem'
-
 import Spinner from '../layout/Spinner'
 import { getAuthor } from '../../actions/author'
 
 const Author = ({ match }) => {
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(getAuthor(match.params.id))
   }, [dispatch, match.params.id])
 
   const { author, loading } = useSelector(state => state.author)
-
   const [entries, setEntries] = useState([])
   const [sources, setSources] = useState([])
 
@@ -60,9 +58,7 @@ const Author = ({ match }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <Link to='/authors' className='btn'>
-        Back To Authors
-      </Link>
+      <BackButton />
       <h1 className='lead text-dark'>
         Author: {author.lastName + ', ' + author.firstName}
       </h1>

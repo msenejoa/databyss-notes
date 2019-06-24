@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 import { deleteSource } from '../../actions/source'
 
 const SourceItem = ({
-  deleteSource,
-  auth,
   source: {
     _id,
     resource,
@@ -35,7 +33,7 @@ const SourceItem = ({
       <p className='my-1'>Publishing Company : {publishingCompany}</p>
       <p className='my-1'>Source Type: {sourceType}</p>
       <p className='my-1'>URL: {url}</p>
-      <p className='my-1'>Other Entries: {entries.length - 1}</p>
+      <p className='my-1'>Total Entries: {entries.length}</p>
     </div>
   </div>
 )
