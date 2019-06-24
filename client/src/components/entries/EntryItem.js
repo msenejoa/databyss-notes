@@ -1,26 +1,24 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { deleteEntry } from '../../actions/entry'
 
 const EntryItem = ({
-  deleteEntry,
-  auth,
   entry: { _id, entry, source, author, pageTo, pageFrom },
 }) => (
   <div className='post bg-white p-1 my-1'>
     <div>
       <Link to={`/entries/${_id}`}>
-        <h4>{source.resource}</h4>
+        <h4>{entry}</h4>
       </Link>
     </div>
     <div>
+      <p className='my-1'>authors: {author.length}</p>
       <p className='my-1'>
-        {author.lastName}, {author.firstName}
+        Page(s): {pageFrom}
+        {pageTo && '-' + pageTo}
       </p>
-      <p className='my-1'>{pageTo}</p>
-      <p className='my-1'>{pageFrom}</p>
       <p className='my-1'>{entry}</p>
     </div>
   </div>

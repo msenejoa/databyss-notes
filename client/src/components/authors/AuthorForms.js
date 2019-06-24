@@ -13,7 +13,7 @@ const clearForm = {
 const AuthorForms = ({ addAuthor }) => {
   const [formData, setFormData] = useState(clearForm)
 
-  const { firstName, lastName, entries, sources } = formData
+  const { firstName, lastName } = formData
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value })

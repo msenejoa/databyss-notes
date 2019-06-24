@@ -1,14 +1,14 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createProfile, getCurrentProfile } from '../../actions/profile';
+import React, { Fragment, useState, useEffect } from 'react'
+import { Link, withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { createProfile, getCurrentProfile } from '../../actions/profile'
 
 const EditProfile = ({
   profile: { profile, loading },
   createProfile,
   getCurrentProfile,
-  history
+  history,
 }) => {
   const [formData, setFormData] = useState({
     company: '',
@@ -22,13 +22,13 @@ const EditProfile = ({
     facebook: '',
     linkedin: '',
     youtube: '',
-    instagram: ''
-  });
+    instagram: '',
+  })
 
-  const [displaySocialInputs, toggleSocialInputs] = useState(false);
+  const [displaySocialInputs, toggleSocialInputs] = useState(false)
 
   useEffect(() => {
-    getCurrentProfile();
+    getCurrentProfile()
 
     setFormData({
       company: loading || !profile.company ? '' : profile.company,
@@ -43,9 +43,9 @@ const EditProfile = ({
       facebook: loading || !profile.social ? '' : profile.social.facebook,
       linkedin: loading || !profile.social ? '' : profile.social.linkedin,
       youtube: loading || !profile.social ? '' : profile.social.youtube,
-      instagram: loading || !profile.social ? '' : profile.social.instagram
-    });
-  }, [loading, getCurrentProfile]);
+      instagram: loading || !profile.social ? '' : profile.social.instagram,
+    })
+  }, [loading, getCurrentProfile, profile])
 
   const {
     company,
@@ -59,16 +59,16 @@ const EditProfile = ({
     facebook,
     linkedin,
     youtube,
-    instagram
-  } = formData;
+    instagram,
+  } = formData
 
   const onChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const onSubmit = e => {
-    e.preventDefault();
-    createProfile(formData, history, true);
-  };
+    e.preventDefault()
+    createProfile(formData, history, true)
+  }
 
   return (
     <Fragment>
@@ -242,20 +242,20 @@ const EditProfile = ({
         </Link>
       </form>
     </Fragment>
-  );
-};
+  )
+}
 
 EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
-};
+  profile: PropTypes.object.isRequired,
+}
 
 const mapStateToProps = state => ({
-  profile: state.profile
-});
+  profile: state.profile,
+})
 
 export default connect(
   mapStateToProps,
   { createProfile, getCurrentProfile }
-)(withRouter(EditProfile));
+)(withRouter(EditProfile))

@@ -30,30 +30,9 @@ const EntryForm = ({
 
   const [formData, setFormData] = useState(clearForm)
 
-  const {
-    author,
-    source,
-    pageFrom,
-    pageTo,
-    files,
-    entry,
-    index,
-    document,
-  } = formData
-  /*
-  const authorsList = authors.map(a => (
-    <option key={a._id} value={a._id} label={a.lastName} />
-  ))
-*/
-  let newSources = sources
+  const { source, pageFrom, pageTo, entry } = formData
 
-  /*
-  if (author.length > 0) {
-    newSources = sources.filter(s => {
-      const result = s.authors.includes(author)
-      return result
-    })
-  }*/
+  let newSources = sources
 
   const sourcesList = newSources.map(s => (
     <option key={s._id} value={s._id} label={s.resource} />

@@ -23,7 +23,7 @@ const SourceForm = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getAuthors())
-  }, [])
+  }, [dispatch])
   const authorState = useSelector(state => state.author)
 
   const [formData, setFormData] = useState(clearForm)
@@ -37,8 +37,6 @@ const SourceForm = () => {
     publishingCompany,
     sourceType,
     url,
-    files,
-    entries,
   } = formData
 
   const [renderList, setRenderList] = useState({})
@@ -50,7 +48,7 @@ const SourceForm = () => {
 
   useEffect(() => {
     setAuthorList(authorState.authors.filter(a => authors.indexOf(a._id) < 0))
-  }, [formData])
+  }, [formData, authorState, authors])
 
   useEffect(() => {
     setRenderList({
@@ -58,21 +56,21 @@ const SourceForm = () => {
         <option key={a._id} value={a._id} label={a.lastName} />
       )),
       selected: authors.map(a => {
-        const match = authorState.authors.find(b => b._id == a)
+        const match = authorState.authors.find(b => b._id === a)
         return (
           <th key={match._id}>
-            <a
+            <button
               className='btn-small btn-light'
               onClick={() => removeAuthor(match._id)}
             >
               <i className='fas fa-window-close text-danger' />
-            </a>
+            </button>
             {'  ' + match.lastName}
           </th>
         )
       }),
     })
-  }, [authorList, formData])
+  }, [authorList, formData, authorState, authors])
 
   const removeAuthor = id => {
     setFormData({ ...formData, authors: authors.filter(a => a !== id) })

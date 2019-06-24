@@ -1,20 +1,22 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
+
 import Spinner from '../layout/Spinner'
 import SourceItem from './../sources/SourceItem'
+import AuthorItem from './../authors/AuthorItem'
+
 import { getEntry } from '../../actions/entry'
 import { getSource } from '../../actions/source'
-
-import { getAuthorList } from '../../actions/author'
 
 const Entry = ({ match }) => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getEntry(match.params.id))
-  }, [])
+  }, [dispatch, match.params.id])
 
-  const { entry } = useSelector(state => state.entry)
+  const { entry, loading } = useSelector(state => state.entry)
 
   const { source } = useSelector(state => state.source)
 
@@ -22,42 +24,47 @@ const Entry = ({ match }) => {
     if (entry) {
       dispatch(getSource(entry.source))
     }
-  }, [entry])
-  /*
-  const { entry, loading } = useSelector(state => state.entry)
-  const [entryList, setEntryList] = useState([])
-  const [renderedList, setRenderedList] = useState({})
+  }, [entry, dispatch])
 
-  */
+  const [render, setRender] = useState({})
 
-  /*
   useEffect(() => {
     if (entry) {
-      getEntryList(source.authors).then(a => setAuthorList(a))
+      const authorList = entry.author.map(async id => {
+        const res = await axios.get(`/api/authors/${id}`)
+        return res.data
+      })
+      Promise.all(authorList).then(list =>
+        setRender(r => ({ ...r, list: list }))
+      )
     }
-  }, [source])
+  }, [entry])
 
   useEffect(() => {
-    setRenderedList({
-      author: authorList.map(a => <AuthorItem key={a._id} author={a} />),
-    })
-  }, [authorList])
+    if (render.list) {
+      let list = render.list.map(a => <AuthorItem key={a._id} author={a} />)
+      setRender(r => ({ ...r, authors: list }))
+    }
+  }, [render.list])
 
-  console.log(source)
-*/
-  return (
+  return loading || source === null ? (
+    <Spinner />
+  ) : (
     <Fragment>
       <Link to='/authors' className='btn'>
         Back To Authors (this needs to be dynamic)
       </Link>
       <h1 className='lead text-dark'>Entry: </h1>
       <div className='post bg-white p-1 my-1'>
+        <p>
+          page(s): {entry && entry.pageFrom}
+          {entry && entry.pageTo > 0 && '-' + entry.pageTo}
+        </p>
         <p>{entry && entry.entry}</p>
       </div>
       <div className='m-2'>
         <h3>Authors</h3>
-        PLACEHOLDER
-        <div className='profile-grid' />
+        {render.authors && render.authors}
       </div>
       <div className='m-2'>
         <h3>Source</h3>
@@ -70,7 +77,3 @@ const Entry = ({ match }) => {
 }
 
 export default Entry
-
-/*loading || source === null ? (
-    <Spinner />
-  ) : */

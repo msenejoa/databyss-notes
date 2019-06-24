@@ -1,8 +1,5 @@
-import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { deleteAuthor } from '../../actions/author'
 
 const AuthorItem = ({
   author: { _id, firstName, lastName, sources, entries },

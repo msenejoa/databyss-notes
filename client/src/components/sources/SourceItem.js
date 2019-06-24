@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -29,7 +29,13 @@ const SourceItem = ({
     </Link>
 
     <div>
-      <p className='my-1'>{abbreviation}</p>
+      <p className='my-1'>Abbreviation: {abbreviation}</p>
+      <p className='my-1'>Date: {date}</p>
+      <p className='my-1'>City: {city}</p>
+      <p className='my-1'>Publishing Company : {publishingCompany}</p>
+      <p className='my-1'>Source Type: {sourceType}</p>
+      <p className='my-1'>URL: {url}</p>
+      <p className='my-1'>Other Entries: {entries.length - 1}</p>
     </div>
   </div>
 )
