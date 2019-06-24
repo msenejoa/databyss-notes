@@ -40,30 +40,37 @@ const EntryForm = ({
     index,
     document,
   } = formData
-
+  /*
   const authorsList = authors.map(a => (
     <option key={a._id} value={a._id} label={a.lastName} />
   ))
-
+*/
   let newSources = sources
+
+  /*
   if (author.length > 0) {
     newSources = sources.filter(s => {
       const result = s.authors.includes(author)
       return result
     })
-  }
+  }*/
 
   const sourcesList = newSources.map(s => (
     <option key={s._id} value={s._id} label={s.resource} />
   ))
 
   const onChange = e => {
+    if (e.target.name === 'source') {
+      let a = sources.filter(s => s._id === e.target.value)
+      let newFormData = formData
+      newFormData.author = a[0].authors
+      setFormData(newFormData)
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const onSubmit = e => {
     formData.document = formData.entry
-    console.log(formData)
     e.preventDefault()
     addEntry(formData)
     setFormData(clearForm)
@@ -82,6 +89,7 @@ const EntryForm = ({
           onSubmit(e)
         }}
       >
+        {/*
         <div className='form-group'>
           <select name='author' value={author} onChange={e => onChange(e)}>
             <option value='0'>* Select Author</option>
@@ -89,7 +97,7 @@ const EntryForm = ({
           </select>
           <small className='form-text'>author</small>
         </div>
-
+      */}
         <div className='form-group'>
           <select name='source' value={source} onChange={e => onChange(e)}>
             <option value='0'>* Select Source</option>

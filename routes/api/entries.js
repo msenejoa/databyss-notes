@@ -33,10 +33,11 @@ router.post('/', auth, async (req, res) => {
     const post = await entries.save()
 
     appendToList({
-      authorId: post.author,
+      authors: post.author,
       sourceId: post.source,
       entryId: post._id,
     })
+
     /*
     const author = await Author.findOne({
       _id: post.author,
@@ -81,8 +82,8 @@ router.get('/:id', auth, async (req, res) => {
     res.status(500).send('Server Error')
   }
 })
-// @route    GET api/sources/
-// @desc     Get all sources
+// @route    GET api/entries/
+// @desc     Get all entries
 // @access   Private
 router.get('/', auth, async (req, res) => {
   try {
@@ -98,25 +99,52 @@ router.get('/', auth, async (req, res) => {
   }
 })
 
-const appendToList = async ({ authorId, entryId, sourceId }) => {
+const appendToList = async ({ authors, entryId, sourceId }) => {
   try {
-    let author = await Author.findOne({
-      _id: authorId,
-    })
+    const addToAuthor = authorId => {
+      const promises = authorId.map(async a => {
+        if (a) {
+          let author = await Author.findOne({
+            _id: a,
+          }).catch(err => console.log(err))
 
-    if (author) {
-      let newInput = author
-      let list = newInput.entries
-      if (list.indexOf(entryId) > 0) return
-      list.push(entryId)
-      newInput.entries = list
+          if (author) {
+            let newInput = author
+            let list = newInput.entries
+            if (list.indexOf(entryId) > 0) return
+            list.push(entryId)
+            newInput.entries = list
+            author = await Author.findOneAndUpdate(
+              { _id: a },
+              { $set: newInput },
+              { new: true }
+            ).catch(err => console.log(err))
+          }
+        }
+      })
+      return Promise.all(promises)
+    }
 
-      author = await Author.findOneAndUpdate(
-        { _id: authorId },
-        { $set: newInput },
-        { new: true }
-      )
-      console.log(author)
+    let response = addToAuthor(authors)
+
+    if (sourceId) {
+      let source = await Source.findOne({
+        _id: sourceId,
+      })
+
+      if (source) {
+        let newEntry = source
+        let entrylist = newEntry.entries
+        if (entrylist.indexOf(entryId) > 0) return
+        entrylist.push(entryId)
+        newEntry.entries = entrylist
+
+        source = await Source.findOneAndUpdate(
+          { _id: sourceId },
+          { $set: newEntry },
+          { new: true }
+        )
+      }
     }
   } catch (err) {
     console.log(err)

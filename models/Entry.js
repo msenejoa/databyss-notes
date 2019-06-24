@@ -7,9 +7,11 @@ const EntrySchema = new mongoose.Schema({
     ref: 'users',
     required: true,
   },
-  author: {
-    type: String,
-  },
+  author: [
+    {
+      type: String,
+    },
+  ],
   source: {
     type: String,
   },

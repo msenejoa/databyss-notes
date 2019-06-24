@@ -28,8 +28,6 @@ const Source = ({ match }) => {
     })
   }, [authorList])
 
-  console.log(source)
-
   return loading || source === null ? (
     <Spinner />
   ) : (
